@@ -12,6 +12,8 @@ services:
     - NODE_ENV=development
   volumes:
     - ./backend:/app
+  restart:
+    always
     
   
  
@@ -26,6 +28,8 @@ services:
      - BROWSER=none
    volumes:
      - ./frontend:/app
+   restart:
+       always
      
    depends_on:
      - backend
