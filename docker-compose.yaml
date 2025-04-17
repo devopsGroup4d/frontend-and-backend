@@ -12,6 +12,8 @@ services:
     - NODE_ENV=development
   volumes:
     - ./backend:/app
+  network_mode: "host"
+
  
  frontend:
    build:
@@ -26,4 +28,6 @@ services:
      - ./frontend:/app
    depends_on:
      - backend
+   network_mode: "host"
+
 
