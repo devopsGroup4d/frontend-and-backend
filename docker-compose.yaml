@@ -12,9 +12,8 @@ services:
     - NODE_ENV=development
   volumes:
     - ./backend:/app
-    - /var/run/docker.sock:/var/run/docker.sock
-  network_mode: "host"
-
+    
+  
  
  frontend:
    build:
@@ -27,9 +26,9 @@ services:
      - BROWSER=none
    volumes:
      - ./frontend:/app
-     - /var/run/docker.sock:/var/run/docker.sock
+     
    depends_on:
      - backend
-   network_mode: "host"
+   
 
 
