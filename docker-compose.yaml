@@ -12,7 +12,6 @@ services:
     - NODE_ENV=development
   volumes:
     - ./backend:/app
-  restart: always
  
  frontend:
    build:
@@ -27,5 +26,4 @@ services:
      - ./frontend:/app
    depends_on:
      - backend
-   restart: always
 
