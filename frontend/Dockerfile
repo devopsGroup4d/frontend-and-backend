@@ -1,17 +1,30 @@
 FROM node:16-alpine
 
+# Set npm cache to a writable directory
+ENV NPM_CONFIG_CACHE=/tmp/.npm
+
 WORKDIR /app
 
-COPY package*.json package-lock.json ./ 
+# Copy package files first for better layer caching
+COPY package*.json package-lock.json ./
 
-RUN npm install && ls -l /app/node_modules
+# Install dependencies with clean cache
+RUN npm config set cache /tmp/.npm && \
+    npm install --no-optional && \
+    ls -l /app/node_modules
 
+# Copy application files
 COPY . .
 
-RUN chmod -R +x node_modules/.bin
+# Verify installed packages and build
+RUN npm list --depth=0 && \
+    npm run build && \
+    chmod -R +x node_modules/.bin
 
-RUN npm run build
+# Install serve globally (for production)
+RUN npm install -g serve
 
-EXPOSE 3000 
+EXPOSE 3000
 
+# Use serve for production or npm start for development
 CMD ["npm", "start"]
