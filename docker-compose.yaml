@@ -8,6 +8,8 @@ services:
   container_name: backend-service
   ports:
     - "5000:5000"
+  networks:
+    - host_network
   environment:
     - NODE_ENV=development
   volumes:
@@ -30,9 +32,9 @@ services:
      - ./frontend:/app
    restart:
        always
-     
    depends_on:
      - backend
-   
-
+networks:
+  host_network:
+    driver: bridge
 
