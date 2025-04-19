@@ -1,12 +1,19 @@
 FROM node:16-alpine
 
-# Set npm cache to a writable directory
-ENV NPM_CONFIG_CACHE=/tmp/.npm
+
+RUN mkdir -p /app && \
+    addgroup -S appgroup && \
+    adduser -S appuser -G appgroup && \
+    chown -R appuser:appgroup /app
+
 
 WORKDIR /app
 
+# Set npm cache to a writable directory
+ENV NPM_CONFIG_CACHE=/tmp/.npm
+
 # Copy package files first for better layer caching
-COPY package*.json package-lock.json ./
+COPY --chown=appuser:appgroup package*.json package-lock.json ./
 
 # Install dependencies with clean cache
 RUN npm config set cache /tmp/.npm && \
@@ -16,7 +23,7 @@ RUN npm config set cache /tmp/.npm && \
     ls -l /app/node_modules
 
 # Copy application files
-COPY . .
+COPY --chown=appuser:appgroup . .
 
 # Verify installed packages and build
 RUN npm list --depth=0 && \
