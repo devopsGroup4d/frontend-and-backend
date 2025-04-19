@@ -12,7 +12,7 @@ COPY package*.json package-lock.json ./
 RUN npm config set cache /tmp/.npm && \
     npm install --no-optional && \
     mkdir -p node_modules/.cache && \
-    chmod -R 777 node_modules/.cache
+    chmod -R 777 node_modules/.cache && \
     ls -l /app/node_modules
 
 # Copy application files
