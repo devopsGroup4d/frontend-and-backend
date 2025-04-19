@@ -30,6 +30,7 @@ services:
    environment:
      - REACT_APP_API_URL=http://backend:3001
      - BROWSER=none
+   user: "1000:1000"
    volumes:
      - ./frontend:/app
      - /app/node_modules
