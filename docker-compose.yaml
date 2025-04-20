@@ -30,6 +30,8 @@ services:
    environment:
      - REACT_APP_API_URL=http://backend:3001
      - BROWSER=none
+     - PUID=${USER_ID:-1000}
+     - PGID=${GROUP_ID:-1000}
    user: "1000:1000"
    volumes:
      - ./frontend:/app
