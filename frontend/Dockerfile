@@ -1,11 +1,12 @@
 FROM node:16-alpine
 
+ARG PUID=1000
+ARG PGID=1000
 
 RUN mkdir -p /app && \
     addgroup -S appgroup && \
     adduser -S appuser -G appgroup && \
     chown -R appuser:appgroup /app
-
 
 WORKDIR /app
 
@@ -25,6 +26,9 @@ RUN npm config set cache /tmp/.npm && \
 
 # Copy application files
 COPY --chown=appuser:appgroup . .
+
+# Change ownership of /app based on PUID and PGID
+RUN chown -R ${PUID}:${PGID} /app
 
 # Verify installed packages and build
 RUN npm list --depth=0 && \
