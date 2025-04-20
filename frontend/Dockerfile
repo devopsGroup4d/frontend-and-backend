@@ -1,7 +1,7 @@
 FROM node:16-alpine
 
-ARG PUID=1000
-ARG PGID=1000
+ARG PUID=100
+ARG PGID=100
 
 RUN mkdir -p /app && \
     addgroup -S appgroup && \
