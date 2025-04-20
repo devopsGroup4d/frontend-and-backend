@@ -32,11 +32,11 @@ RUN chown -R ${PUID}:${PGID} /app
 
 # Verify installed packages and build
 RUN npm list --depth=0 && \
-    sudo npm run build && \
+    npm run build && \
     chmod -R +x node_modules/.bin
 
 # Install serve globally (for production)
-RUN sudo npm install -g serve
+RUN npm install -g serve
 
 EXPOSE 3000
 
