@@ -28,11 +28,11 @@ COPY --chown=appuser:appgroup . .
 
 # Verify installed packages and build
 RUN npm list --depth=0 && \
-    npm run build && \
+    sudo npm run build && \
     chmod -R +x node_modules/.bin
 
 # Install serve globally (for production)
-RUN npm install -g serve
+RUN sudo npm install -g serve
 
 EXPOSE 3000
 
