@@ -40,4 +40,8 @@ app.post('/', (req, res) => {
     return res.json(response);
 });
 
+app.get('/', (req, res) => {
+  res.send('Backend service is running');
+});
+
 app.listen(port, () => console.log(`Backend app listening on port ${port}!`))

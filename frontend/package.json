@@ -13,9 +13,9 @@
     "@testing-library/react": "^14.0.0"
   },
   "scripts": {
-    "start": "node node_modules/react-scripts/scripts/start.js start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test"
+    "test": "react-scripts test --watchAll=false"
   },
   "eslintConfig": {
     "extends": "react-app"

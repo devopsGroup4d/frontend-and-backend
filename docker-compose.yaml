@@ -10,6 +10,7 @@ services:
     - "3001:3001"
   environment:
     - NODE_ENV=development
+    - PORT=3001
   volumes:
     - ./backend:/app
     - /app/node_modules
@@ -17,6 +18,8 @@ services:
     always
   networks:
     - app_network
+    
+  
  
  frontend:
    build:
@@ -25,18 +28,20 @@ services:
    ports:
      - "3000:3000"
    environment:
-     - REACT_APP_API_URL=http://backend:5000
+     - REACT_APP_API_URL=http://backend:3001
      - BROWSER=none
+     - PUID=${USER_ID:-1000}
+     - PGID=${GROUP_ID:-1000}
+   user: "1000:1000"
    volumes:
      - ./frontend:/app
      - /app/node_modules
    restart:
-     always
+       always
    depends_on:
      - backend
    networks:
      - app_network
-
 networks:
   app_network:
     driver: bridge
