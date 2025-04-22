@@ -1,0 +1,31 @@
+---
+- name: Install Docker on the remote server
+  hosts: aws_servers # This matches the group name in your inventory
+  become: yes # Run tasks with sudo privileges
+  tasks:
+    - name: Update dnf repository cache
+      dnf:
+        update_cache: yes
+      when: ansible_os_family == "RedHat" # Amazon Linux is RedHat-based
+
+    - name: Install Docker
+      dnf:
+        name: docker
+        state: present
+
+    - name: Start and enable the Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes 
+
+    - name: Install Python 3 pip (if not already present)
+      dnf:
+        name: python3-pip
+        state: present
+
+    - name: Install Docker SDK for Python (using pip3)
+      pip:
+        name: docker
+        executable: pip3
+        extra_args: "--user"
