@@ -57,6 +57,7 @@
       docker_container_info:
         name: "{{ backend_container_name }}"
       register: backend_container_info
+      ignore_errors: yes
 
     - name: Stop and remove the existing backend container if it exists and is not in the desired state
       docker_container:
