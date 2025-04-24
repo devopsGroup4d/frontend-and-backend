@@ -34,7 +34,7 @@
       docker_container:
         name: "{{ frontend_container_name }}"
         state: absent
-      when: frontend_container_info is defined and frontend_container_info.get('containers') | length > 0
+      when: frontend_container_info is defined and frontend_container_info.get('containers') is iterable and frontend_container_info.get('containers') | length > 0
     - name: Run the frontend Docker container if it doesn't exist or was removed
       docker_container:
         name: "{{ frontend_container_name }}"
@@ -62,7 +62,7 @@
       docker_container:
         name: "{{ backend_container_name }}"
         state: absent
-      when: backend_container_info is defined and backend_container_info.get('containers') | length > 0
+      when: frontend_container_info is defined and backend_container_info.get('containers') is iterable and backend_container_info.get('containers') | length > 0
 
     - name: Run the backend Docker container if it doesn't exist or was removed
       docker_container:
