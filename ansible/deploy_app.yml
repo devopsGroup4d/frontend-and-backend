@@ -21,7 +21,6 @@
         name: docker
         state: started
         enabled: yes
-<<<<<<< HEAD
 
     - name: Pull the frontend Docker image from Docker Hub if not present
       docker_image:
@@ -38,7 +37,6 @@
 
     - name: Run the frontend Docker container
       docker_container:
-=======
 
     # Frontend deployment tasks
     - name: Pull frontend Docker image
@@ -62,7 +60,6 @@
 
     - name: Deploy frontend container
       community.docker.docker_container:
->>>>>>> origin/main
         name: "{{ frontend_container_name }}"
         image: "{{ docker_registry }}/{{ docker_username }}/{{ frontend_image_name }}:{{ frontend_image_tag }}"
         ports:
@@ -76,7 +73,6 @@
         name: "{{ docker_registry }}/{{ docker_username }}/{{ backend_image_name }}:{{ backend_image_tag }}"
         source: pull
 
-<<<<<<< HEAD
     - name: Stop and remove the existing backend container
       docker_container:
         name: "{{ backend_container_name }}"
@@ -85,7 +81,6 @@
 
     - name: Run the backend Docker container
       docker_container:
-=======
     - name: Check if backend container exists
       community.docker.docker_container_info:
         name: "{{ backend_container_name }}"
@@ -102,7 +97,6 @@
 
     - name: Deploy backend container
       community.docker.docker_container:
->>>>>>> origin/main
         name: "{{ backend_container_name }}"
         image: "{{ docker_registry }}/{{ docker_username }}/{{ backend_image_name }}:{{ backend_image_tag }}"
         ports:
