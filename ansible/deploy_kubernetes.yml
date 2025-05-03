@@ -1,0 +1,11 @@
+---
+- name: Deploy Kubernetes Manifests on EC2 Instance
+  hosts: kubernetes_hosts
+  gather_facts: no
+
+  tasks:
+    - name: Apply Kubernetes manifests
+      command: kubectl apply -f /home/ec2-user/manifests
+      environment:
+        KUBECONFIG: /home/ec2-user/.kube/config
+      become: yes

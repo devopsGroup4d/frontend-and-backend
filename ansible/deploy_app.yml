@@ -5,9 +5,9 @@
     docker_registry: "docker.io"
     docker_username: "tasneemkhaled"
     frontend_image_name: "frontend"
-    frontend_image_tag: "72"
+    frontend_image_tag: "{{ frontend_image_tag | default('latest') }}"
     backend_image_name: "backend"
-    backend_image_tag: "72"
+    backend_image_tag: "{{ backend_image_tag | default('latest') }}"
     frontend_container_name: "my-frontend-container"
     backend_container_name: "my-backend-container"
     host_frontend_port: 3000
@@ -21,6 +21,7 @@
         name: docker
         state: started
         enabled: yes
+<<<<<<< HEAD
 
     - name: Pull the frontend Docker image from Docker Hub if not present
       docker_image:
@@ -37,6 +38,31 @@
 
     - name: Run the frontend Docker container
       docker_container:
+=======
+
+    # Frontend deployment tasks
+    - name: Pull frontend Docker image
+      community.docker.docker_image:
+        name: "{{ docker_registry }}/{{ docker_username }}/{{ frontend_image_name }}:{{ frontend_image_tag }}"
+        source: pull
+
+    - name: Check if frontend container exists
+      community.docker.docker_container_info:
+        name: "{{ frontend_container_name }}"
+      register: frontend_container_info
+      ignore_errors: yes
+      changed_when: false
+
+    - name: Remove existing frontend container if present
+      community.docker.docker_container:
+        name: "{{ frontend_container_name }}"
+        state: absent
+        force_kill: yes
+      when: frontend_container_info is not failed and frontend_container_info.exists
+
+    - name: Deploy frontend container
+      community.docker.docker_container:
+>>>>>>> origin/main
         name: "{{ frontend_container_name }}"
         image: "{{ docker_registry }}/{{ docker_username }}/{{ frontend_image_name }}:{{ frontend_image_tag }}"
         ports:
@@ -44,13 +70,13 @@
         restart_policy: always
         state: started
 
-    - name: Pull the backend Docker image from Docker Hub if not present
-      docker_image:
+    # Backend deployment tasks
+    - name: Pull backend Docker image
+      community.docker.docker_image:
         name: "{{ docker_registry }}/{{ docker_username }}/{{ backend_image_name }}:{{ backend_image_tag }}"
-        pull: yes
-      register: backend_image_result
-      when: backend_image_result.image is not defined
+        source: pull
 
+<<<<<<< HEAD
     - name: Stop and remove the existing backend container
       docker_container:
         name: "{{ backend_container_name }}"
@@ -59,6 +85,24 @@
 
     - name: Run the backend Docker container
       docker_container:
+=======
+    - name: Check if backend container exists
+      community.docker.docker_container_info:
+        name: "{{ backend_container_name }}"
+      register: backend_container_info
+      ignore_errors: yes
+      changed_when: false
+
+    - name: Remove existing backend container if present
+      community.docker.docker_container:
+        name: "{{ backend_container_name }}"
+        state: absent
+        force_kill: yes
+      when: backend_container_info is not failed and backend_container_info.exists
+
+    - name: Deploy backend container
+      community.docker.docker_container:
+>>>>>>> origin/main
         name: "{{ backend_container_name }}"
         image: "{{ docker_registry }}/{{ docker_username }}/{{ backend_image_name }}:{{ backend_image_tag }}"
         ports:
