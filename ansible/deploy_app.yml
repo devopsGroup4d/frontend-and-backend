@@ -1,8 +1,6 @@
----
-- name: Deploy the Dockerized frontend and backend applications
+- name: Deploy Frontend and Backend Containers
   hosts: aws_servers
   become: yes
-
   vars:
     docker_registry: "docker.io"
     docker_username: "tasneemkhaled"
@@ -18,6 +16,12 @@
     container_backend_port: 3001
 
   tasks:
+    - name: Ensure Docker is installed and running
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: yes
+
     - name: Pull the frontend Docker image from Docker Hub if not present
       docker_image:
         name: "{{ docker_registry }}/{{ docker_username }}/{{ frontend_image_name }}:{{ frontend_image_tag }}"
@@ -25,18 +29,13 @@
       register: frontend_image_result
       when: frontend_image_result.image is not defined
 
-    - name: Check if the frontend container exists
-      docker_container_info:
-        name: "{{ frontend_container_name }}"
-      register: frontend_container_info
-
-    - name: Stop and remove the existing frontend container if it exists and is not in the desired state
+    - name: Stop and remove the existing frontend container
       docker_container:
         name: "{{ frontend_container_name }}"
         state: absent
-      when: frontend_container_info.containers | length > 0
+      ignore_errors: yes # Allow this to fail if the container doesn't exist
 
-    - name: Run the frontend Docker container if it doesn't exist or was removed
+    - name: Run the frontend Docker container
       docker_container:
         name: "{{ frontend_container_name }}"
         image: "{{ docker_registry }}/{{ docker_username }}/{{ frontend_image_name }}:{{ frontend_image_tag }}"
@@ -44,7 +43,6 @@
           - "{{ host_frontend_port }}:{{ container_frontend_port }}"
         restart_policy: always
         state: started
-      when: frontend_container_info.containers | length == 0
 
     - name: Pull the backend Docker image from Docker Hub if not present
       docker_image:
@@ -53,18 +51,13 @@
       register: backend_image_result
       when: backend_image_result.image is not defined
 
-    - name: Check if the backend container exists
-      docker_container_info:
-        name: "{{ backend_container_name }}"
-      register: backend_container_info
-
-    - name: Stop and remove the existing backend container if it exists and is not in the desired state
+    - name: Stop and remove the existing backend container
       docker_container:
         name: "{{ backend_container_name }}"
         state: absent
-      when: backend_container_info.containers | length > 0
+      ignore_errors: yes # Allow this to fail if the container doesn't exist
 
-    - name: Run the backend Docker container if it doesn't exist or was removed
+    - name: Run the backend Docker container
       docker_container:
         name: "{{ backend_container_name }}"
         image: "{{ docker_registry }}/{{ docker_username }}/{{ backend_image_name }}:{{ backend_image_tag }}"
@@ -72,4 +65,3 @@
           - "{{ host_backend_port }}:{{ container_backend_port }}"
         restart_policy: always
         state: started
-      when: backend_container_info.containers | length == 0
