@@ -7,5 +7,5 @@
     - name: Apply Kubernetes manifests
       command: kubectl apply -f /home/ec2-user/manifests
       environment:
-        KUBECONFIG: /home/ec2-user/.kube/config
+        KUBECONFIG: /tmp/kubeconfig
       become: yes
