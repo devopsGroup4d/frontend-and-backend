@@ -5,7 +5,5 @@
 
   tasks:
     - name: Apply Kubernetes manifests
-      command: kubectl apply -f /home/ec2-user/manifests
-      environment:
-        KUBECONFIG: /tmp/kubeconfig
-      become: yes
+      command: "kubectl --kubeconfig=/home/ec2-user/.kube/config apply -f /home/ec2-user/manifests"
+      #become: yes
