@@ -13,6 +13,11 @@ WORKDIR /app
 # Set npm cache to a writable directory
 ENV NPM_CONFIG_CACHE=/tmp/.npm
 
+RUN mkdir -p /tmp/.npm && chown -R node:node /tmp/.npm
+
+USER node
+
+
 # Copy package files first for better layer caching
 COPY --chown=appuser:appgroup package*.json package-lock.json ./
 
