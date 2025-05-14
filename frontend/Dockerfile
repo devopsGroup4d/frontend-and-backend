@@ -15,9 +15,6 @@ ENV NPM_CONFIG_CACHE=/tmp/.npm
 
 RUN mkdir -p /tmp/.npm && chown -R node:node /tmp/.npm
 
-USER node
-
-
 # Copy package files first for better layer caching
 COPY --chown=appuser:appgroup package*.json package-lock.json ./
 
@@ -44,6 +41,8 @@ RUN npm list --depth=0 && \
 RUN npm install -g serve
 
 EXPOSE 3000
+
+USER node
 
 # Use serve for production or npm start for development
 CMD ["npm", "start"]
